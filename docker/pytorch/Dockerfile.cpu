@@ -40,11 +40,11 @@ RUN curl -fsSL -v -o ~/miniconda.sh -O  https://repo.anaconda.com/miniconda/Mini
     /opt/conda/bin/conda clean -ya
 
 FROM dev-base AS build
-ARG VERSION=1.6.0
+ARG VERSION=v1.6.0
 ARG WITH_TORCHVISION=1
 COPY --from=conda /opt/conda /opt/conda
-WORKDIR /opt
-RUN git clone https://github.com/pytorch/pytorch.git && cd pytorch && git checkout $VERSION \
+WORKDIR /opt/pytorch
+RUN git clone https://github.com/pytorch/pytorch.git . && git checkout $VERSION && \
     git submodule sync && git submodule update --init --recursive
 RUN --mount=type=cache,target=/opt/ccache \
     USE_MKLDNN=1 USE_CUDA=0 USE_CUDNN=0 USE_NNPACK=0 USE_FBGEMM=0 BUILD_CAFFE2_OPS=0 \
